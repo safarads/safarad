@@ -642,39 +642,39 @@ animateBars('skip');
 </div>
 </div>
 
-<form class="contact-form" onsubmit="event.preventDefault(); alert('Thank you! You have been added to the October 2026 Soft Launch priority list.');">
+<form class="contact-form" id="reserveForm" action="https://formspree.io/f/xgaeyynw" method="POST">
 <div class="form-row">
 <div class="form-group">
 <label for="name">Full Name *</label>
-<input type="text" id="name" placeholder="John Doe" required>
+<input type="text" id="name" name="name" placeholder="John Doe" required>
 </div>
 <div class="form-group">
 <label for="company">Company Name *</label>
-<input type="text" id="company" placeholder="Your Company Ltd." required>
+<input type="text" id="company" name="company" placeholder="Your Company Ltd." required>
 </div>
 </div>
 
 <div class="form-row">
 <div class="form-group">
 <label for="email">Work Email *</label>
-<input type="email" id="email" placeholder="john@company.com" required>
+<input type="email" id="email" name="email" placeholder="john@company.com" required>
 </div>
 <div class="form-group">
 <label for="phone">Phone Number *</label>
-<input type="tel" id="phone" placeholder="+252 6X XXX XXXX" required>
+<input type="tel" id="phone" name="phone" placeholder="+252 6X XXX XXXX" required>
 </div>
 </div>
 
 <div class="form-group">
 <label for="package">Selected Package *</label>
-<select id="package" required>
+<select id="package" name="package" required>
 <option value="soft-launch-50" selected>October Soft Launch: 50 Buses (3 Months) - $`18.00/bus/mo</option>
 </select>
 </div>
 
 <div class="form-group">
 <label for="renewal-interest">2027 Renewal Interest (Optional)</label>
-<select id="renewal-interest">
+<select id="renewal-interest" name="renewal-interest">
 <option value="undecided">Not sure yet, want to test first</option>
 <option value="250-buses">Interested in 250-Bus 12-Mo Renewal (`$15.13/bus/mo)</option>
 <option value="500-buses">Interested in 500+ Bus 12-Mo Renewal ($12.16/bus/mo)</option>
@@ -685,6 +685,38 @@ animateBars('skip');
 Reserve My Soft Launch Spot →
 </button>
 </form>
+
+<script>
+document.getElementById('reserveForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const form = e.target;
+  const submitBtn = form.querySelector('button[type="submit"]');
+  const originalText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting...';
+
+  fetch(form.action, {
+    method: 'POST',
+    body: new FormData(form),
+    headers: { 'Accept': 'application/json' }
+  })
+  .then(function (response) {
+    if (response.ok) {
+      alert('Thank you! You have been added to the October 2026 Soft Launch priority list.');
+      form.reset();
+    } else {
+      alert('Something went wrong submitting the form. Please try again or email info@safarads.com directly.');
+    }
+  })
+  .catch(function () {
+    alert('Something went wrong submitting the form. Please try again or email info@safarads.com directly.');
+  })
+  .finally(function () {
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalText;
+  });
+});
+</script>
 </div>
 </section>
 </main>
